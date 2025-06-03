@@ -43,7 +43,6 @@ class Game {
   initBase() {
     this.canvaser = new Canvas();
     this.controller = new Controller();
-    window.$engine = this;
     this.setRenderRoot(new Loading());
     this.render();
   }
@@ -54,7 +53,7 @@ class Game {
 
   setRenderRoot(renderRoot) {
     this.renderRoot = renderRoot;
-    renderRoot.setRoot(this)
+    renderRoot.setEngine(this)
     console.log(renderRoot)
   }
 

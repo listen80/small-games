@@ -12,13 +12,16 @@ export class Player extends Tank {
     return false;
   }
   calcFire() {
+    const $engine = this.getEngine();
     const { fire } = $engine.controller.keyMap;
-    if (fire && this.calcFire) {
+    if (fire && calcFire) {
       this.map.createFire(this);
       console.log($engine.controller.keyMap);
     }
   }
   calcMove() {
+    const $engine = this.getEngine();
+
     if (!this.canMove) {
       const { up, down, left, right } = $engine.controller.keyMap;
       if (up) {

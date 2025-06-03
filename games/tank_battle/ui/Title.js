@@ -8,6 +8,7 @@ export default class Title extends Group {
     this.cb = cb;
   }
   step() {
+    const $engine = this.getEngine()
     const key = $engine.controller.keyMap.confirm;
     if (key) {
       this.cb();

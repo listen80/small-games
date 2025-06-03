@@ -1,21 +1,21 @@
 import { BOX_SIZE, TANK_SIZE } from "../js/size.js";
-import { Base, Group, Text, Spirit } from "../lib/Base.js";
-
+import { Base, Group, Text, Spirit, Move } from "../lib/Base.js";
 export class Grass extends Spirit {
   constructor(x, y, imgs) {
-    super(x * BOX_SIZE, y * BOX_SIZE, BOX_SIZE, BOX_SIZE, imgs.grass);
+    console.log(imgs)
+    super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE }, imgs.grass);
   }
 }
 
 export class Water extends Spirit {
   constructor(x, y, imgs) {
-    super(x * BOX_SIZE, y * BOX_SIZE, BOX_SIZE, BOX_SIZE, imgs.water);
+    super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE }, imgs.water);
   }
 }
 
 export class Wall extends Spirit {
   constructor(x, y, imgs) {
-    super(x * BOX_SIZE, y * BOX_SIZE, BOX_SIZE, BOX_SIZE, imgs.wall);
+    super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE }, imgs.wall);
     this.canBeDestoried = true;
     // this.fatherArray = WallArray;
   }
@@ -23,140 +23,21 @@ export class Wall extends Spirit {
 
 export class Steel extends Spirit {
   constructor(x, y, imgs) {
-    super(x * BOX_SIZE, y * BOX_SIZE, BOX_SIZE, BOX_SIZE, imgs.steel);
+    super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE }, imgs.steel);
   }
 }
 
 export class Home extends Spirit {
   constructor(x, y, imgs) {
-    super(x * BOX_SIZE, y * BOX_SIZE, BOX_SIZE * 2, BOX_SIZE * 2, imgs.home);
+    super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE * 2, h: BOX_SIZE * 2 }, imgs.home);
   }
 }
 
-export class Move extends Spirit {
-  constructor(x, y, w, h, img) {
-    super(x, y, w, h, img);
-  }
-  left(target, x) {
-    var line = target.x + target.w;
-    if (
-      this.x > target.x + target.w &&
-      x <= target.x + target.w &&
-      this.y + this.h >= target.y &&
-      this.y <= target.y + target.h
-    ) {
-      return { next: line + 1 };
-    }
-  }
-  right(target, x) {
-    var line = target.x - this.w;
-    if (
-      this.x < line &&
-      x >= line &&
-      this.y + this.h >= target.y &&
-      this.y <= target.y + target.h
-    ) {
-      return { next: line - 1 };
-    }
-  }
-  up(target, y) {
-    var line = target.y + target.h;
-    if (
-      this.y > line &&
-      y <= line &&
-      this.x + this.w >= target.x &&
-      this.x <= target.x + target.w
-    ) {
-      return { next: line + 1 };
-    }
-  }
-  down(target, y) {
-    var line = target.y - this.h;
-    if (
-      this.y < line &&
-      y >= line &&
-      this.x + this.w >= target.x &&
-      this.x <= target.x + target.w
-    ) {
-      return { next: line - 1 };
-    }
-  }
-  handleObstacle(next, dir, i) {
-    var self = this;
-    this.ObstacleArray.forEach(function (arr) {
-      this.arr.forEach(function (target, index) {
-        if (
-          self === target ||
-          (self.hasDestoryAbility &&
-            target.isMy === self.isMy &&
-            (target.name === "tank" || target.hasDestoryAbility))
-        ) {
-          return;
-        } else {
-          var result = self[dir](target, next);
-          if (result) {
-            self.handlePengzhang(target, self, index, i);
-            next = result.next;
-          }
-        }
-      });
-    });
-    return next;
-  }
-  handlePengzhang(target, self, index, i) {
-    if (self.hasDestoryAbility) {
-      //   self.fatherArray.splice(i, 1);
-      self.remove();
-      BoomArray.push(new Boom(self));
-      if (target.canBeDestoried) {
-        target.remove();
-        // target.fatherArray.splice(index, 1);
-        target.destoryProps && BoomArray.push(new Boom(target));
-      }
-    }
-  }
-  move(keyMap) {
-    var key = this.key;
-    var keys = this.keys;
-    var next;
-    switch (key) {
-      case keys.left:
-        next = this.x - this.baseSpeed;
-        this.x = this.handleObstacle(next, "left", i);
-        break;
-      case keys.right:
-        next = this.x + this.baseSpeed;
-        this.x = this.handleObstacle(next, "right", i);
-        break;
-      case keys.up:
-        next = this.y - this.baseSpeed;
-        this.y = this.handleObstacle(next, "up", i);
-        break;
-      case keys.down:
-        next = this.y + this.baseSpeed;
-        this.y = this.handleObstacle(next, "down", i);
-        break;
-    }
-  }
-  drawX(ctx) {
-    ctx.save();
-    ctx.translate(this.x + this.w / 2, this.y + this.h / 2);
-    ctx.rotate(
-      ([this.keys.up, this.keys.right, this.keys.down, this.keys.left].indexOf(
-        this.face
-      ) *
-        Math.PI) /
-        2
-    );
-    ctx.translate(-this.w / 2, -this.h / 2);
-    ctx.drawImage(this.img, 0, 0, this.w, this.h);
-    ctx.restore();
-  }
-}
+
 
 export class Tank extends Move {
   constructor(x, y, img) {
-    super(x * BOX_SIZE, y * BOX_SIZE, TANK_SIZE, TANK_SIZE, img);
+    super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: TANK_SIZE, h: TANK_SIZE }, img);
     this.x += (BOX_SIZE * 2 - TANK_SIZE) / 2;
     this.y += (BOX_SIZE * 2 - TANK_SIZE) / 2;
     this.destoryProps = {
