@@ -2,7 +2,6 @@
 import Controller from "../lib/Controller.js";
 import Canvas from "../lib/Canvas.js";
 import Loader from "../lib/Loader.js";
-import { Group, Text } from "../lib/Base.js";
 
 // scene
 import Loading from "../ui/Loading.js";
@@ -13,42 +12,35 @@ import Level from "../ui/Level.js";
 class Game {
   constructor() {
     this.loader = new Loader();
+    this.scenes = {
+      Loading,
+      Title,
+      Map,
+      Level,
+    };
     this.loader.init(() => {
       this.initBase();
-      this.initGame();
+      this.loadResource();
     });
-    console.log(this)
   }
 
-  gotoTitle(args) {
-    this.setRenderRoot(
-      new Title(() => {
-        this.gotoMap(args);
-      })
-    );
-  }
-
-  gotoLevel() {
-    this.setRenderRoot(
-      new Level(() => {
-        this.gotoMap();
-      })
-    );
-  }
-
-  gotoMap(args) {
-    this.setRenderRoot(new Map(args, this.loader));
+  goto(name, data) {
+    const Scene = this.scenes[name]
+    this.setRenderRoot(new Scene(data));
   }
 
   initBase() {
     this.canvaser = new Canvas();
     this.controller = new Controller();
-    this.setRenderRoot(new Loading());
+    this.goto('Loading')
     this.render();
   }
 
-  initGame() {
-    this.loader.loadResource(() => this.gotoTitle());
+  loadResource() {
+    this.loader.loadResource(() => {
+      // this.goto('Title');
+      this.goto('Map', { round: 1 });
+    });
   }
 
   setRenderRoot(renderRoot) {
@@ -59,7 +51,6 @@ class Game {
 
   render() {
     const render = () => {
-      // this.renderRoot.emit();
       this.controller.calc();
       this.renderRoot.step(this.controller);
       this.controller.reset();

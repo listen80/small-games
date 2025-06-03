@@ -9,10 +9,9 @@ export default class Controller {
     });
   }
   keydown(e) {
-    console.log(e.key);
     this.keys.push(e.key);
-    const key = e.key;
-    this.calcKey(key);
+    // const key = e.key;
+    // this.calcKey(key);
   }
   calcKey(key) {
     const x = {
@@ -22,26 +21,22 @@ export default class Controller {
       d: 'right',
       ' ': 'fire'
     }
-    this.keyMap[x[key]] = true;
+    this.cmds[x[key]] = true;
+  }
+  registryKeys(cmdKeys) {
+    this.cmdKeys = cmdKeys;
   }
   calc() {
-    // this.keyMap = {};
     for (let key of this.keys) {
-      this.keyMap[key] = true;
-      if (key === " ") {
-        this.keyMap.confirm = true;
+      for (let x in this.cmdKeys) {
+        if (this.cmdKeys[x] === key) {
+          this.cmds[x] = true;
+        }
       }
-    }
-    const _ = {
-      up: "w",
-      right: "d",
-      down: "s",
-      left: "a",
-      fire: " ",
     }
   }
   reset() {
     this.keys = [];
-    this.keyMap = {};
+    this.cmds = {};
   }
 }

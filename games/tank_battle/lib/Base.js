@@ -18,6 +18,12 @@ export class Rect {
       console.error("h is not number");
     }
   }
+  multi(n) {
+    this.x *= n;
+    this.y *= n;
+    this.w *= n;
+    this.h *= n;
+  }
 }
 export class Base {
   #parent = null;
@@ -44,6 +50,7 @@ export class Base {
   }
   setEngine(engine) {
     this.#engine = engine;
+    this.onAppear?.(engine);
   }
 }
 
@@ -90,7 +97,6 @@ export class Group extends Base {
     });
   }
   setEngine(engine) {
-    // this.setEngine(engine)
     super.setEngine(engine);
     this.#children.forEach((child, i) => {
       child.setEngine(engine);
@@ -129,9 +135,9 @@ export class Text extends Base {
   }
 }
 
-export class Move extends Spirit {
+export class Move extends Base {
   constructor({ x, y, w, h }, img) {
-    super({ x, y, w, h }, img);
+    super({ x, y, w, h });
   }
   left(target, x) {
     var line = target.x + target.w;

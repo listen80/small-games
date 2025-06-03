@@ -5,4 +5,8 @@ export default class Loading extends Group {
     super();
     this.add(new Text({ x: 200, y: 200 }, "加载中"));
   }
+  step() {
+    const $engine = this.getEngine();
+
+  }
 }
