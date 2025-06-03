@@ -1,6 +1,6 @@
-class Tetris {
+export class Tetris {
     constructor(config = {}) {
-        const {el = document.body, side = 35, space = 4, width = 10, height = 14, speed = 300} = config
+        const { el = document.body, side = 35, space = 4, width = 10, height = 14, speed = 300 } = config
         this.side = side // 每个方块边长
         this.space = space
         const totalSide = side + space
@@ -39,7 +39,7 @@ class Tetris {
                     this.calcBoxes([-1, 0])
                     break
                 case 39: // 方向为右
-                   this.calcBoxes([1, 0])
+                    this.calcBoxes([1, 0])
                     break
             }
             this.draw()
@@ -99,7 +99,7 @@ class Tetris {
     drawScore(score = 0, msg) {
 
         this.paints.beginPath();
-        
+
         this.paints.moveTo(this.width * this.totalSide + this.space, 0);
         this.paints.lineTo(this.width * this.totalSide + this.space, this.canvas.height);
         this.paints.strokeStyle = '#0cc';
@@ -108,7 +108,7 @@ class Tetris {
         this.paints.font = ` ${this.side}px '微软雅黑','宋体'`; //设置字体
         this.paints.fillStyle = "red";
         this.paints.textBaseline = "top";
-        this.paints.textAlign = "center";   
+        this.paints.textAlign = "center";
         this.paints.fillText("得分: " + score, (this.width + 3) * this.totalSide, (this.height - 3) * this.totalSide);
         if (msg) {
             this.paints.fillText(msg, (this.width + 3) * this.totalSide, (this.height - 5) * this.totalSide);
@@ -147,14 +147,14 @@ class Tetris {
                 if (typeof argu === 'function') {
                     const re = argu(box)
                     x = re.x, y = re.y
-                } else if(argu){
+                } else if (argu) {
                     const [deltaX, deltaY] = argu
                     x = box.x + deltaX, y = box.y + deltaY
                 }
 
                 let cannot = y >= this.height || x < 0 || x >= this.width || this.staticBox.some((box) => box.x === x && box.y === y)
                 if (!cannot) {
-                    distArr.push({x ,y})
+                    distArr.push({ x, y })
                 } else {
                     break
                 }
@@ -165,9 +165,9 @@ class Tetris {
                     box.x = distArr[i].x
                     box.y = distArr[i].y
                 }
-            } else if (argu[1]){
+            } else if (argu[1]) {
                 this.staticBox.push(...this.downBox)
-                if(this.downBox.some(box => box.y <= 0)) {
+                if (this.downBox.some(box => box.y <= 0)) {
                     this.gameStop()
                 }
                 this.downBox.forEach(box => {
@@ -175,14 +175,14 @@ class Tetris {
                 })
 
                 let line = 0
-                for(let row = this.map.length - 1; row >= 0; row--) {
+                for (let row = this.map.length - 1; row >= 0; row--) {
                     let n = this.map[row]
                     if (n === this.width) {
                         this.score += this.width * 100 * 2 ** line++
                         this.map.splice(row, 1)
                         this.map.unshift(0)
                         let i = this.staticBox.length
-                        while(i) {
+                        while (i) {
                             i--
                             if (this.staticBox[i].y === row) {
                                 this.staticBox.splice(i, 1)

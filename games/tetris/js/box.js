@@ -15,7 +15,7 @@ class Box {
     rotate(origin) {
         return {
             x: -this.y + origin.y + origin.x,
-            y:  this.x - origin.x + origin.y
+            y: this.x - origin.x + origin.y
         }
     }
     draw(paints) {
@@ -24,5 +24,5 @@ class Box {
         game.paints.fillStyle = this.color
         game.paints.fillRect(space + this.x * totalSide, space + this.y * totalSide, side, side)
     }
-    
+
 }

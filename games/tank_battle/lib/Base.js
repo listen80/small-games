@@ -1,6 +1,10 @@
 export class Base {
   #parent = null;
   #root = null;
+  // #x = 0;
+  // #y = 0;
+  // #w = 0;
+  // #h = 0;
   constructor({ x = 0, y = 0, w = 0, h = 0 } = {}) {
     this.x = x;
     this.y = y;
@@ -9,7 +13,8 @@ export class Base {
   }
   setParent(p) {
     this.#parent = p;
-    this.#root = this.#parent.#root;
+    console.log(p)
+    this.#root = p.#root;
   }
   getParent() {
     return this.#parent;
@@ -19,6 +24,9 @@ export class Base {
   }
   getRoot() {
     return this.#root;
+  }
+  setRoot(root) {
+    this.#root = root;
   }
 }
 
@@ -39,8 +47,9 @@ export class Group extends Base {
       console.error("?????");
     }
   }
-  add(...childlren) {
-    for (let child of childlren) {
+  add(...children) {
+    for (let child of children) {
+      debugger
       if (typeof child === "object" && child) {
         child.setParent(this);
         // child.#parent = this;
@@ -67,12 +76,16 @@ export class Group extends Base {
 }
 
 export class Spirit extends Base {
+  #img = null;
   constructor(x, y, w, h, img) {
     super({ x, y, w, h });
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
+    this.setImage(img);
+  }
+  setImage(img) {
     this.img = img;
   }
   draw(ctx) {
@@ -81,18 +94,16 @@ export class Spirit extends Base {
 }
 
 export class Text extends Base {
+  #text = "";
   constructor(pos, text) {
     super(pos);
-    this.text = text;
+    this.setText(text);
+  }
+  setText(text) {
+    this.#text = text;
   }
   draw(ctx) {
     ctx.fillStyle = "red";
-    ctx.fillText(this.text, this.x, this.y);
-  }
-}
-
-export class Grass extends Spirit {
-  constructor(x, y, imgs) {
-    super(x * BOX_SIZE, y * BOX_SIZE, BOX_SIZE, BOX_SIZE, imgs.grass);
+    ctx.fillText(this.#text, this.x, this.y);
   }
 }

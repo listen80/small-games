@@ -10,18 +10,18 @@ import Map from "../ui/Map.js";
 import Title from "../ui/Title.js";
 import Level from "../ui/Level.js";
 
-class Game extends Group {
+class Game {
   constructor() {
-    super();
     this.loader = new Loader();
     this.loader.init(() => {
       this.initBase();
       this.initGame();
     });
+    console.log(this)
   }
 
   gotoTitle(args) {
-    this.setRoot(
+    this.setRenderRoot(
       new Title(() => {
         this.gotoMap(args);
       })
@@ -29,7 +29,7 @@ class Game extends Group {
   }
 
   gotoLevel() {
-    this.setRoot(
+    this.setRenderRoot(
       new Level(() => {
         this.gotoMap();
       })
@@ -37,15 +37,14 @@ class Game extends Group {
   }
 
   gotoMap(args) {
-    this.setRoot(new Map(args, this.loader));
+    this.setRenderRoot(new Map(args, this.loader));
   }
 
   initBase() {
     this.canvaser = new Canvas();
     this.controller = new Controller();
-    this.controller.bind();
     window.$engine = this;
-    this.setRoot(new Loading());
+    this.setRenderRoot(new Loading());
     this.render();
   }
 
@@ -53,18 +52,20 @@ class Game extends Group {
     this.loader.loadResource(() => this.gotoTitle());
   }
 
-  setRoot(root) {
-    this.root = root;
+  setRenderRoot(renderRoot) {
+    this.renderRoot = renderRoot;
+    renderRoot.setRoot(this)
+    console.log(renderRoot)
   }
 
   render() {
     const render = () => {
-      // this.root.emit();
+      // this.renderRoot.emit();
       this.controller.calc();
-      this.root.step(this.controller);
+      this.renderRoot.step(this.controller);
       this.controller.reset();
       this.canvaser.clear();
-      this.root.draw(this.canvaser.ctx);
+      this.renderRoot.draw(this.canvaser.ctx);
       requestAnimationFrame(render);
     };
 

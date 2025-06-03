@@ -1,6 +1,7 @@
 export default class Controller {
   constructor() {
     this.keys = [];
+    this.bind()
   }
   bind() {
     document.addEventListener("keydown", (e) => {
