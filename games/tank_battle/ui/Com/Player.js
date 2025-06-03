@@ -1,4 +1,4 @@
-import { BOX_SIZE } from "../js/size.js";
+import { BOX_SIZE } from "../../data/size.js";
 import { Tank } from "./ManyUI.js";
 
 export class Player extends Tank {

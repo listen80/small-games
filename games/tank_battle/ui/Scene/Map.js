@@ -1,7 +1,7 @@
-import { Grass, Water, Steel, Home, Enemy, Wall } from "./ManyUI.js";
-import { Group } from "../lib/Base.js";
-import { maps } from "../js/maps.js";
-import { Player } from "./Player.js";
+import { Grass, Water, Steel, Home, Enemy, Wall } from "../Com/ManyUI.js";
+import { Group } from "../../lib/Base.js";
+import { maps } from "../../data/maps.js";
+import { Player } from "../Com/Player.js";
 
 export default class Map extends Group {
   constructor({ round = 1 } = {}) {

@@ -1,31 +1,29 @@
 // engine
-import Controller from "../lib/Controller.js";
-import Canvas from "../lib/Canvas.js";
-import Loader from "../lib/Loader.js";
+import Controller from "./Controller.js";
+import Canvas from "./Canvas.js";
+import Loader from "./Loader.js";
 
-// scene
-import Loading from "../ui/Loading.js";
-import Map from "../ui/Map.js";
-import Title from "../ui/Title.js";
-import Level from "../ui/Level.js";
 
-class Game {
+export class Game {
+  #scenes;
   constructor() {
     this.loader = new Loader();
-    this.scenes = {
-      Loading,
-      Title,
-      Map,
-      Level,
-    };
+    this.#scenes = {};
     this.loader.init(() => {
       this.initBase();
       this.loadResource();
     });
   }
 
+  registryScenes(allScenes) {
+    this.#scenes = {
+      ...this.#scenes,
+      ...allScenes
+    };
+  }
+
   goto(name, data) {
-    const Scene = this.scenes[name]
+    const Scene = this.#scenes[name]
     this.setRenderRoot(new Scene(data));
   }
 
@@ -62,5 +60,3 @@ class Game {
     render();
   }
 }
-
-new Game();

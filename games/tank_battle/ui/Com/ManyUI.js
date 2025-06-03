@@ -1,5 +1,5 @@
-import { BOX_SIZE, TANK_SIZE } from "../js/size.js";
-import { Base, Group, Text, Spirit, Move } from "../lib/Base.js";
+import { BOX_SIZE, TANK_SIZE } from "../../data/size.js";
+import { Base, Group, Text, Spirit, Move } from "../../lib/Base.js";
 export class Grass extends Spirit {
   constructor(x, y) {
     super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE });

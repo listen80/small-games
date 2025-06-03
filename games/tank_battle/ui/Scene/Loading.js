@@ -1,4 +1,4 @@
-import { Group, Text } from "../lib/Base.js";
+import { Group, Text } from "Base";
 
 export default class Loading extends Group {
   constructor() {
