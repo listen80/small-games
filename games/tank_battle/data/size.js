@@ -1,14 +1,18 @@
+/**
+ * 游戏的常量
+ */
+// 游戏的宽度和高度
 const GAME_WIDTH = 26;
 const GAME_HEIGHT = 26;
+
+// 每个格子的大小
 const BOX_SIZE = 30;
 
 // 这个是坦克的大小
 const TANK_SIZE = BOX_SIZE * 2;
+
 // 子弹的大小
 const BULLET_SIZE = 8;
-
-const width = BOX_SIZE * GAME_WIDTH;
-const height = BOX_SIZE * GAME_HEIGHT;
 
 export {
   GAME_HEIGHT,
@@ -16,6 +20,4 @@ export {
   BOX_SIZE,
   TANK_SIZE,
   BULLET_SIZE,
-  width,
-  height,
 };

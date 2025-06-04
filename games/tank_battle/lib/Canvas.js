@@ -1,5 +1,6 @@
-import { width, height } from "../data/size.js";
-
+import { GAME_WIDTH, GAME_HEIGHT, BOX_SIZE } from "../data/size.js";
+const width = BOX_SIZE * GAME_WIDTH;
+const height = BOX_SIZE * GAME_HEIGHT;
 export default class Canvas {
   constructor() {
     var canvas = document.createElement("canvas");
