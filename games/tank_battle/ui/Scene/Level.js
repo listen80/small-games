@@ -1,4 +1,4 @@
-import { Group, Text } from "Base";
+import { Group, Text } from "Engine";
 
 export default class Level extends Group {
   constructor() {

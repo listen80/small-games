@@ -34,6 +34,7 @@ export default class Controller {
         }
       }
     }
+    console.log(this.cmds)
   }
   reset() {
     this.keys = [];

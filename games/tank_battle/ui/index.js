@@ -4,11 +4,14 @@ import Map from "./Scene/Map.js";
 import Title from "./Scene/Title.js";
 import Level from "./Scene/Level.js";
 
-import { Game } from "../lib/index.js";
+import { Engine } from "Engine";
 
-export default class TANK_SSSS extends Game {
+export default class Game extends Engine {
   constructor() {
     super();
+    this.init()
+  }
+  init() {
     this.registryScenes({
       Loading,
       Title,

@@ -1,5 +1,5 @@
-import { BOX_SIZE } from "../../data/size.js";
-import { Tank } from "./ManyUI.js";
+import { BOX_SIZE } from "Data/size.js";
+import { Tank } from "./Tank.js";
 
 export class Player extends Tank {
   constructor(name, x, y, img, cmdKeys) {

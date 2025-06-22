@@ -1,22 +1,23 @@
 export class Rect {
-  constructor({ x = 0, y = 0, w = 0, h = 0 } = {}) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    if (typeof x !== "number") {
-      debugger
-      console.error("x is not number");
+  constructor(rect) {
+    if (rect) {
+      this.set(rect)
     }
-    if (typeof y !== "number") {
-      console.error("y is not number");
+  }
+  set({ x, y, w, h }) {
+    if (typeof x === "number") {
+      this.x = x;
     }
-    if (typeof w !== "number") {
-      console.error("w is not number");
+    if (typeof y === "number") {
+      this.y = y;
     }
-    if (typeof h !== "number") {
-      console.error("h is not number");
+    if (typeof w === "number") {
+      this.w = w;
     }
+    if (typeof h === "number") {
+      this.h = h;
+    }
+
   }
   multi(n) {
     this.x *= n;
@@ -32,7 +33,10 @@ export class Base {
   constructor({ x = 0, y = 0, w = 0, h = 0 } = {}) {
     this.#rect = new Rect({ x, y, w, h });
   }
-  getRect() {
+  rect(rect) {
+    if (rect) {
+      this.#rect.set(rect)
+    }
     return this.#rect;
   }
   setParent(p) {
@@ -114,7 +118,7 @@ export class Spirit extends Base {
     this.#img = img;
   }
   draw(ctx) {
-    const $rect = this.getRect();
+    const $rect = this.rect();
     ctx.drawImage(this.#img, $rect.x, $rect.y, $rect.w, $rect.h);
   }
 }
@@ -129,7 +133,7 @@ export class Text extends Base {
     this.#text = text;
   }
   draw(ctx) {
-    const $rect = this.getRect();
+    const $rect = this.rect();
     ctx.fillStyle = "red";
     ctx.fillText(this.#text, $rect.x, $rect.y);
   }

@@ -1,3 +1,6 @@
+import { BOX_SIZE } from "Data/size.js";
+import { Tank } from "./Tank.js";
+
 export class Enemy extends Tank {
   constructor(x, y, imgs) {
     super(x, y, imgs.enemy);

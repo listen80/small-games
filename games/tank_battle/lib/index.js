@@ -3,8 +3,9 @@ import Controller from "./Controller.js";
 import Canvas from "./Canvas.js";
 import Loader from "./Loader.js";
 
+export * from './Base.js'
 
-export class Game {
+export class Engine {
   #scenes;
   constructor() {
     this.loader = new Loader();
@@ -24,6 +25,7 @@ export class Game {
 
   goto(name, data) {
     const Scene = this.#scenes[name]
+    console.log(name)
     this.setRenderRoot(new Scene(data));
   }
 
@@ -36,8 +38,7 @@ export class Game {
 
   loadResource() {
     this.loader.loadResource(() => {
-      // this.goto('Title');
-      this.goto('Map', { round: 1 });
+      this.goto('Title');
     });
   }
 
