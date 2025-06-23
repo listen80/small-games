@@ -38,7 +38,7 @@ export class Engine {
 
   loadResource() {
     this.loader.loadResource(() => {
-      this.goto('Title');
+      this.goto('Map');
     });
   }
 

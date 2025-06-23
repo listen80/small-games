@@ -1,3 +1,10 @@
+export class Ease {
+  constructor(data) {
+    console.log(data)
+  }
+}
+
+const size = 30;
 export class Rect {
   constructor(rect) {
     if (rect) {
@@ -25,6 +32,12 @@ export class Rect {
     this.w *= n;
     this.h *= n;
   }
+  add(rect) {
+    const { x = 0, y = 0 } = rect
+  }
+  equal(rect) {
+    return this.x === rect.x && this.y === rect.y
+  }
 }
 export class Base {
   #parent = null;
@@ -32,6 +45,13 @@ export class Base {
   #rect = { x: 0, y: 0, w: 0, h: 0 }
   constructor({ x = 0, y = 0, w = 0, h = 0 } = {}) {
     this.#rect = new Rect({ x, y, w, h });
+  }
+  move(rect) {
+    const { x = 0, y = 0 } = rect
+    const _rect = new Rect({ x: this.#rect.x, y: this.#rect.y })
+    _rect.x += x
+    _rect.y += y
+    return _rect;
   }
   rect(rect) {
     if (rect) {
@@ -41,9 +61,13 @@ export class Base {
   }
   setParent(p) {
     this.#parent = p;
-    this.#engine = p.#engine;
+    if (p) {
+      this.#engine = p.#engine;
+    } else {
+      this.#engine = null
+    }
   }
-  getParent() {
+  parent() {
     return this.#parent;
   }
   remove() {
@@ -66,6 +90,10 @@ export class Group extends Base {
       this.add(child);
     });
   }
+  size() {
+    return this.#children.length
+  }
+
   removeChild(child) {
     const index = this.#children.indexOf(child);
     const re = this.#children.splice(index, 1);
@@ -86,9 +114,11 @@ export class Group extends Base {
       }
     }
   }
+  find(func) {
+    return this.#children.find(func);
+  }
   reset() {
     this.#children.splice(0, this.length);
-    console.warn("reset");
   }
   step(controller) {
     this.#children.forEach((child, i) => {
@@ -96,9 +126,13 @@ export class Group extends Base {
     });
   }
   draw(ctx) {
+    const rect = this.rect()
+    ctx.translate(rect.x * size, rect.y * size)
     this.#children.forEach((child, i) => {
       child.draw?.(ctx, i);
     });
+    ctx.translate(-rect.x * size, -rect.y * size)
+
   }
   setEngine(engine) {
     super.setEngine(engine);
@@ -119,7 +153,7 @@ export class Spirit extends Base {
   }
   draw(ctx) {
     const $rect = this.rect();
-    ctx.drawImage(this.#img, $rect.x, $rect.y, $rect.w, $rect.h);
+    ctx.drawImage(this.#img, $rect.x * size, $rect.y * size, ($rect.w || 1) * size, ($rect.h || 1) * size);
   }
 }
 
@@ -135,13 +169,14 @@ export class Text extends Base {
   draw(ctx) {
     const $rect = this.rect();
     ctx.fillStyle = "red";
-    ctx.fillText(this.#text, $rect.x, $rect.y);
+    ctx.fillText(this.#text, $rect.x * size, $rect.y * size);
   }
 }
 
 export class Move extends Group {
   constructor({ x, y, w, h }, img) {
-    super({ x, y, w, h });
+    super();
+    this.rect({ x, y, w, h })
   }
   left(target, x) {
     var line = target.x + target.w;
@@ -221,7 +256,7 @@ export class Move extends Group {
       }
     }
   }
-  move(keyMap) {
+  movex(keyMap) {
     var key = this.key;
     var keys = this.keys;
     var next;

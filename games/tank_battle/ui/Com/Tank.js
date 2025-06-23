@@ -3,7 +3,7 @@ import { Spirit, Move } from "Engine";
 
 export class Tank extends Move {
   constructor(x, y, img) {
-    super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE * 2, h: BOX_SIZE * 2 });
+    super({ x: x * 1, y: y * 1, w: 1 * 2, h: 1 * 2 });
     // this.x += (BOX_SIZE * 2 - TANK_SIZE) / 2;
     // this.y += (BOX_SIZE * 2 - TANK_SIZE) / 2;
     // this.destoryProps = {

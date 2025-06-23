@@ -1,4 +1,4 @@
-import { Group } from "Engine";
+import { Group, Base } from "Engine";
 
 import { maps } from "Data/maps.js";
 
@@ -7,7 +7,7 @@ import { Enemy } from "Com/Enemy.js";
 import { Player } from "Com/Player.js";
 
 export default class Map extends Group {
-  constructor({ round = 1 } = {}) {
+  constructor({ round = 12 } = {}) {
     super();
     this.round = round;
     this.map = maps[this.round];
@@ -20,8 +20,50 @@ export default class Map extends Group {
     // this.createPlayer2P();
     // this.createEnemy();
   }
+  calcColxss(block, dist) {
+    const rect = block.rect()
+    const { x, y } = dist
+    const { w, h } = rect
+    for (let i = 0; i < h; i++) {
+      for (let j = 0; j < w; j++) {
+        const row = this.xxxxArray.map[y + j]
+        if (!row) {
+          return true
+        }
+        const b = row[x + i]
+        if (!b) {
+          return true
+        }
+        if (b.size()) {
+          b.find(() => true).remove()
+          return true
+        }
+      }
+    }
+  }
   createManyLayer() {
     // 创建游戏层级 草 墙 水 玩家 敌人 爆炸 子弹 钢板
+    class Array2 extends Base {
+      constructor(map) {
+        super()
+        this.map = JSON.parse(JSON.stringify(map))
+      }
+      draw(ctx) {
+        for (let i = 0; i < this.map.length; i++) {
+          for (let j = 0; j < this.map[i].length; j++) {
+            this.map[i][j].draw(ctx)
+          }
+        }
+      }
+      setEngine(engine) {
+        super.setEngine(engine);
+        for (let i = 0; i < this.map.length; i++) {
+          for (let j = 0; j < this.map[i].length; j++) {
+            this.map[i][j].setEngine(engine)
+          }
+        }
+      }
+    }
     this.wallArray = new Group();
     this.steelArray = new Group();
     this.grassArray = new Group();
@@ -31,43 +73,49 @@ export default class Map extends Group {
     this.enemyArray = new Group();
     this.boomArray = new Group();
     this.bulletArray = new Group();
+    this.xxxxArray = new Array2(this.map);
 
     this.add(
       this.wallArray,
       this.steelArray,
-      this.grassArray,
       this.waterArray,
       this.iceArray,
-
+      this.xxxxArray,
       this.playerArray,
       this.enemyArray,
       this.boomArray,
       this.bulletArray,
+
+      this.grassArray,
     );
   }
   createBoard() {
     const map = this.map;
     for (var y = 0; y < map.length; y++) {
       for (var x = 0; x < map[y].length; x++) {
+        const current = new Group()
+        current.rect({ y, x })
+        current.name = 'fuck' + y + x
+        this.xxxxArray.map[y][x] = current
         switch (map[y][x]) {
           case 1:
-            this.wallArray.add(new Wall(x, y));
+            current.add(new Wall());
             break;
           case 2:
-            this.steelArray.add(new Steel(x, y));
+            current.add(new Steel());
             break;
           case 3:
-            this.grassArray.add(new Grass(x, y));
+            this.grassArray.add(new Grass({ x, y }));
             break;
           case 4:
-            this.waterArray.add(new Water(x, y));
+            current.add(new Water());
             break;
           case 5:
             // todo ice 冰
-            this.grassArray.add(new Grass(x, y));
+            current.add(new Grass());
             break;
           case 9:
-            this.wallArray.add(new Home(x, y));
+            current.add(new Home());
             break;
           default:
             break;
@@ -76,7 +124,7 @@ export default class Map extends Group {
     }
   }
   createFire(player) {
-    console.log("createFire", player);
+    // console.log("createFire", player);
     // this.bulletArray.add(new Bullet(player));
   }
   createPlayer1P() {

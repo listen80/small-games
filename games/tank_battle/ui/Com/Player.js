@@ -1,17 +1,16 @@
-import { BOX_SIZE } from "Data/size.js";
 import { Tank } from "./Tank.js";
 import { Spirit } from "../../lib/Base.js";
 export class Player extends Tank {
   constructor(name, x, y, img, cmdKeys) {
     super(x, y, img);
     this.name = name;
-    this.speed = BOX_SIZE;
+    this.speed = 1;
     this.cmdKeys = cmdKeys;
     this.isMy = true;
     this.canMove = true;
     this.canFire = true;
-    const spirit = new Spirit({}, img)
-    this.add(spirit)
+    this.spirit = new Spirit({ w: 1 * 2, h: 1 * 2 }, img)
+    this.add(this.spirit)
   }
   onAppear($engine) {
     // $engine.controller.registryKeys(this.cmdKeys);
@@ -23,30 +22,49 @@ export class Player extends Tank {
     const $engine = this.getEngine();
     const fire = $engine.controller.has(' ');
     if (fire) {
-      const mapInstance = this.getParent().getParent()
+      const mapInstance = this.parent().parent()
       mapInstance.createFire(this);
     }
   }
   calcMove() {
-    if (!this.canMove) {
-      return
-    }
+    // if (!this.canMove) {
+    //   return
+    // }
+    let dist = null
     const $engine = this.getEngine();
     if ($engine.controller.has('w')) {
-      this.y -= this.speed;
+      dist = this.move({ y: -this.speed })
+      this.tick = 3;
     }
     if ($engine.controller.has('s')) {
-      this.y += this.speed;
+      dist = this.move({ y: this.speed })
+      this.tick = 3;
     }
     if ($engine.controller.has('a')) {
-      this.x -= this.speed;
+      dist = this.move({ x: -this.speed })
+      this.tick = 3;
     }
     if ($engine.controller.has('d')) {
-      this.x += this.speed;
+      dist = this.move({ x: this.speed })
+      this.tick = 3;
+    }
+
+    if (dist) {
+      const find = this.parent().parent().calcColxss(this, dist)
+      
+      if (find) {
+        console.log(find)
+      } else {
+        this.rect(dist)
+      }
     }
   }
   step() {
-    this.calcMove();
+    if (!this.tick) {
+      this.calcMove();
+    } else {
+      this.tick--
+    }
     this.calcFire();
   }
 }

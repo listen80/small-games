@@ -1,8 +1,7 @@
-import { BOX_SIZE } from "Data/size.js"
 import { Spirit } from "Engine";
 export class Grass extends Spirit {
     constructor(x, y) {
-        super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE });
+        super({ x: x, y: y });
     }
     onAppear($engine) {
         const imgs = $engine.loader.imgs
@@ -12,7 +11,7 @@ export class Grass extends Spirit {
 
 export class Water extends Spirit {
     constructor(x, y) {
-        super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE });
+        super({ x: x, y: y });
 
     }
     onAppear($engine) {
@@ -24,7 +23,7 @@ export class Water extends Spirit {
 
 export class Wall extends Spirit {
     constructor(x, y) {
-        super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE });
+        super({ x: x, y: y });
         this.canBeDestoried = true;
     }
 
@@ -36,7 +35,7 @@ export class Wall extends Spirit {
 
 export class Steel extends Spirit {
     constructor(x, y) {
-        super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE });
+        super({ x: x, y: y });
 
     }
     onAppear($engine) {
@@ -48,7 +47,7 @@ export class Steel extends Spirit {
 
 export class Home extends Spirit {
     constructor(x, y) {
-        super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE * 2, h: BOX_SIZE * 2 });
+        super({ x: x, y: y });
     }
     onAppear($engine) {
         const imgs = $engine.loader.imgs
