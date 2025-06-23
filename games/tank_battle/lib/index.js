@@ -50,9 +50,9 @@ export class Engine {
 
   render() {
     const render = () => {
-      this.controller.calc();
+      // this.controller.calc();
       this.renderRoot.step(this.controller);
-      this.controller.reset();
+      // this.controller.reset();
       this.canvaser.clear();
       this.renderRoot.draw(this.canvaser.ctx);
       requestAnimationFrame(render);

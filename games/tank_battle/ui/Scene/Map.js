@@ -17,7 +17,7 @@ export default class Map extends Group {
     this.createManyLayer();
     this.createBoard();
     this.createPlayer1P();
-    this.createPlayer2P();
+    // this.createPlayer2P();
     // this.createEnemy();
   }
   createManyLayer() {

@@ -1,12 +1,12 @@
+import { BOX_SIZE } from "Data/size.js"
 import { Spirit } from "Engine";
-
 export class Grass extends Spirit {
     constructor(x, y) {
         super({ x: x * BOX_SIZE, y: y * BOX_SIZE, w: BOX_SIZE, h: BOX_SIZE });
     }
     onAppear($engine) {
         const imgs = $engine.loader.imgs
-        this.setImage(imgs.grass)
+        this.src(imgs.grass)
     }
 }
 
@@ -17,7 +17,7 @@ export class Water extends Spirit {
     }
     onAppear($engine) {
         const imgs = $engine.loader.imgs
-        this.setImage(imgs.water)
+        this.src(imgs.water)
     }
 
 }
@@ -30,7 +30,7 @@ export class Wall extends Spirit {
 
     onAppear($engine) {
         const imgs = $engine.loader.imgs
-        this.setImage(imgs.wall)
+        this.src(imgs.wall)
     }
 }
 
@@ -41,7 +41,7 @@ export class Steel extends Spirit {
     }
     onAppear($engine) {
         const imgs = $engine.loader.imgs
-        this.setImage(imgs.steel)
+        this.src(imgs.steel)
     }
 
 }
@@ -52,7 +52,7 @@ export class Home extends Spirit {
     }
     onAppear($engine) {
         const imgs = $engine.loader.imgs
-        this.setImage(imgs.home)
+        this.src(imgs.home)
     }
 
 }

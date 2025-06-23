@@ -1,6 +1,6 @@
 import { BOX_SIZE } from "Data/size.js";
 import { Tank } from "./Tank.js";
-
+import { Spirit } from "../../lib/Base.js";
 export class Player extends Tank {
   constructor(name, x, y, img, cmdKeys) {
     super(x, y, img);
@@ -10,37 +10,38 @@ export class Player extends Tank {
     this.isMy = true;
     this.canMove = true;
     this.canFire = true;
+    const spirit = new Spirit({}, img)
+    this.add(spirit)
   }
   onAppear($engine) {
-    $engine.controller.registryKeys(this.cmdKeys);
+    // $engine.controller.registryKeys(this.cmdKeys);
   }
   calcFire() {
-    const $engine = this.getEngine();
     if (!this.canFire) {
       return;
     }
-    const { fire } = $engine.controller.cmds;
+    const $engine = this.getEngine();
+    const fire = $engine.controller.has(' ');
     if (fire) {
       const mapInstance = this.getParent().getParent()
       mapInstance.createFire(this);
     }
   }
   calcMove() {
-    const $engine = this.getEngine();
     if (!this.canMove) {
       return
     }
-    const { up, down, left, right } = $engine.controller.cmds;
-    if (up) {
+    const $engine = this.getEngine();
+    if ($engine.controller.has('w')) {
       this.y -= this.speed;
     }
-    if (down) {
+    if ($engine.controller.has('s')) {
       this.y += this.speed;
     }
-    if (left) {
+    if ($engine.controller.has('a')) {
       this.x -= this.speed;
     }
-    if (right) {
+    if ($engine.controller.has('d')) {
       this.x += this.speed;
     }
   }

@@ -112,9 +112,9 @@ export class Spirit extends Base {
   #img = null;
   constructor({ x, y, w, h }, img) {
     super({ x, y, w, h });
-    this.setImage(img);
+    this.src(img);
   }
-  setImage(img) {
+  src(img) {
     this.#img = img;
   }
   draw(ctx) {
@@ -127,9 +127,9 @@ export class Text extends Base {
   #text = "";
   constructor(pos, text) {
     super(pos);
-    this.setText(text);
+    this.val(text);
   }
-  setText(text) {
+  val(text) {
     this.#text = text;
   }
   draw(ctx) {
@@ -139,7 +139,7 @@ export class Text extends Base {
   }
 }
 
-export class Move extends Base {
+export class Move extends Group {
   constructor({ x, y, w, h }, img) {
     super({ x, y, w, h });
   }
