@@ -25,8 +25,10 @@ export class Engine {
 
   goto(name, data) {
     const Scene = this.#scenes[name]
-    console.log(name)
-    this.setRenderRoot(new Scene(data));
+    const root = new Scene(data);
+    this.renderRoot = root;
+    root.setEngine(this)
+    console.log(name, root)
   }
 
   initBase() {
@@ -40,12 +42,6 @@ export class Engine {
     this.loader.loadResource(() => {
       this.goto('Map');
     });
-  }
-
-  setRenderRoot(renderRoot) {
-    this.renderRoot = renderRoot;
-    renderRoot.setEngine(this)
-    console.log(renderRoot)
   }
 
   render() {
