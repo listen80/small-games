@@ -10,7 +10,7 @@ export default class Canvas {
 
     canvas.width = width;
     canvas.height = height;
-    ctx.font = "bold 50px Arial";
+    ctx.font = "bold 30px Arial";
     ctx.textAlign = "center";
     this.canvas = canvas;
   }

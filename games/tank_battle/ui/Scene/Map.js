@@ -1,4 +1,4 @@
-import { Group, Base } from "Engine";
+import { Group, Base, Text } from "Engine";
 
 import { maps } from "Data/maps.js";
 
@@ -9,6 +9,7 @@ import { Player } from "Com/Player.js";
 export default class Map extends Group {
   constructor({ round = 16 } = {}) {
     super();
+    this.rect({ x: 2, y: 1 })
     this.round = round;
     this.map = maps[this.round];
   }
@@ -69,22 +70,17 @@ export default class Map extends Group {
         }
       }
     }
-    this.wallArray = new Group();
-    this.steelArray = new Group();
-    this.grassArray = new Group();
-    this.waterArray = new Group();
-    this.iceArray = new Group();
     this.playerArray = new Group();
     this.enemyArray = new Group();
     this.boomArray = new Group();
     this.bulletArray = new Group();
+    this.grassArray = new Group();
+    this.info = new Group();
+    this.info.rect({ x: 28, y: 26 })
+    this.info.add(new Text({}, this.round + 1))
     this.map2Array = new Array2(this.map);
-
+    
     this.add(
-      this.wallArray,
-      this.steelArray,
-      this.waterArray,
-      this.iceArray,
       this.map2Array,
       this.playerArray,
       this.enemyArray,
@@ -92,6 +88,7 @@ export default class Map extends Group {
       this.bulletArray,
 
       this.grassArray,
+      this.info
     );
   }
   createBoard() {
