@@ -51,9 +51,20 @@ export class Player extends Tank {
 
     if (dist) {
       const find = this.parent().parent().calcColxss(this, dist)
-      
-      if (find) {
-        console.log(find)
+      if (find.length) {
+        const isZero = find.some(item => item.rect().z === 0)
+        if (isZero) {
+
+        } else {
+          this.rect(dist)
+        }
+        find.forEach(item => {
+          if (item.rect().z === 0) {
+            if (item.defense < 150) {
+              item.remove()
+            }
+          }
+        })
       } else {
         this.rect(dist)
       }

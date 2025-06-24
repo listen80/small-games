@@ -11,7 +11,8 @@ export class Rect {
       this.set(rect)
     }
   }
-  set({ x, y, w, h }) {
+  set({ x, y, z = 0, w, h }) {
+    this.z = z;
     if (typeof x === "number") {
       this.x = x;
     }
@@ -43,8 +44,8 @@ export class Base {
   #parent = null;
   #engine = null;
   #rect = { x: 0, y: 0, w: 0, h: 0 }
-  constructor({ x = 0, y = 0, w = 0, h = 0 } = {}) {
-    this.#rect = new Rect({ x, y, w, h });
+  constructor({ x = 0, y = 0, w = 0, h = 0, z } = {}) {
+    this.#rect = new Rect({ x, y, w, h, z });
   }
   move(rect) {
     const { x = 0, y = 0 } = rect
@@ -144,8 +145,9 @@ export class Group extends Base {
 
 export class Spirit extends Base {
   #img = null;
-  constructor({ x, y, w, h }, img) {
-    super({ x, y, w, h });
+  constructor({ x, y, w, h, z }, img) {
+    super({ x, y, w, h, z });
+
     this.src(img);
   }
   src(img) {

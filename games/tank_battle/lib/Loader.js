@@ -13,6 +13,7 @@ export default class Loader {
       "steel",
       "grass",
       "water",
+      "ice",
       "home",
       "bullet",
       "blast",

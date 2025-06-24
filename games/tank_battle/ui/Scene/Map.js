@@ -2,12 +2,12 @@ import { Group, Base } from "Engine";
 
 import { maps } from "Data/maps.js";
 
-import { Grass, Water, Steel, Home, Wall } from "Com/MapBlock.js";
+import { Grass, Water, Steel, Home, Wall, Ice } from "Com/MapBlock.js";
 import { Enemy } from "Com/Enemy.js";
 import { Player } from "Com/Player.js";
 
 export default class Map extends Group {
-  constructor({ round = 12 } = {}) {
+  constructor({ round = 16 } = {}) {
     super();
     this.round = round;
     this.map = maps[this.round];
@@ -24,9 +24,10 @@ export default class Map extends Group {
     const rect = block.rect()
     const { x, y } = dist
     const { w, h } = rect
+    const result = []
     for (let i = 0; i < h; i++) {
       for (let j = 0; j < w; j++) {
-        const row = this.xxxxArray.map[y + j]
+        const row = this.map2Array.map[y + j]
         if (!row) {
           return true
         }
@@ -35,11 +36,15 @@ export default class Map extends Group {
           return true
         }
         if (b.size()) {
-          b.find(() => true).remove()
-          return true
+          const one = b.find(() => true)
+          result.push(one)
+          // one.remove()
+          // one.remove()
+          // return true
         }
       }
     }
+    return result
   }
   createManyLayer() {
     // 创建游戏层级 草 墙 水 玩家 敌人 爆炸 子弹 钢板
@@ -73,14 +78,14 @@ export default class Map extends Group {
     this.enemyArray = new Group();
     this.boomArray = new Group();
     this.bulletArray = new Group();
-    this.xxxxArray = new Array2(this.map);
+    this.map2Array = new Array2(this.map);
 
     this.add(
       this.wallArray,
       this.steelArray,
       this.waterArray,
       this.iceArray,
-      this.xxxxArray,
+      this.map2Array,
       this.playerArray,
       this.enemyArray,
       this.boomArray,
@@ -96,7 +101,7 @@ export default class Map extends Group {
         const current = new Group()
         current.rect({ y, x })
         current.name = 'fuck' + y + x
-        this.xxxxArray.map[y][x] = current
+        this.map2Array.map[y][x] = current
         switch (map[y][x]) {
           case 1:
             current.add(new Wall());
@@ -105,14 +110,13 @@ export default class Map extends Group {
             current.add(new Steel());
             break;
           case 3:
-            this.grassArray.add(new Grass({ x, y }));
+            this.grassArray.add(new Grass(x, y));
             break;
           case 4:
             current.add(new Water());
             break;
           case 5:
-            // todo ice 冰
-            current.add(new Grass());
+            current.add(new Ice());
             break;
           case 9:
             current.add(new Home());
