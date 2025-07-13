@@ -5,6 +5,27 @@ import { maps } from "Data/maps.js";
 import { Grass, Water, Steel, Home, Wall, Ice } from "Com/MapBlock.js";
 import { Enemy } from "Com/Enemy.js";
 import { Player } from "Com/Player.js";
+class Array2 extends Base {
+  constructor(map) {
+    super()
+    this.map = JSON.parse(JSON.stringify(map))
+  }
+  draw(ctx) {
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        this.map[i][j].draw(ctx)
+      }
+    }
+  }
+  setEngine(engine) {
+    super.setEngine(engine);
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        this.map[i][j].setEngine(engine)
+      }
+    }
+  }
+}
 
 export default class Map extends Group {
   constructor({ round = 16 } = {}) {
@@ -49,27 +70,6 @@ export default class Map extends Group {
   }
   createManyLayer() {
     // 创建游戏层级 草 墙 水 玩家 敌人 爆炸 子弹 钢板
-    class Array2 extends Base {
-      constructor(map) {
-        super()
-        this.map = JSON.parse(JSON.stringify(map))
-      }
-      draw(ctx) {
-        for (let i = 0; i < this.map.length; i++) {
-          for (let j = 0; j < this.map[i].length; j++) {
-            this.map[i][j].draw(ctx)
-          }
-        }
-      }
-      setEngine(engine) {
-        super.setEngine(engine);
-        for (let i = 0; i < this.map.length; i++) {
-          for (let j = 0; j < this.map[i].length; j++) {
-            this.map[i][j].setEngine(engine)
-          }
-        }
-      }
-    }
     this.playerArray = new Group();
     this.enemyArray = new Group();
     this.boomArray = new Group();
@@ -79,7 +79,7 @@ export default class Map extends Group {
     this.info.rect({ x: 28, y: 26 })
     this.info.add(new Text({}, this.round + 1))
     this.map2Array = new Array2(this.map);
-    
+
     this.add(
       this.map2Array,
       this.playerArray,
@@ -97,7 +97,6 @@ export default class Map extends Group {
       for (var x = 0; x < map[y].length; x++) {
         const current = new Group()
         current.rect({ y, x })
-        current.name = 'fuck' + y + x
         this.map2Array.map[y][x] = current
         switch (map[y][x]) {
           case 1:
