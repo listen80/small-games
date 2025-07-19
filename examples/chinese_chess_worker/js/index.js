@@ -6,5 +6,7 @@ import GUI from "./GUI/index.js";
 const chess = new Chess({
   AIlog: true,
 });
+
 const gui = new GUI(chess);
+
 console.log(gui)

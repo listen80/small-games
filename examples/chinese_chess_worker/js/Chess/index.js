@@ -1,8 +1,9 @@
 ﻿import { getDefaultMap } from "./base/map.js";
 import { cache } from "./base/cache.js";
+import { Man } from "./man/man.js";
+import { initMap } from "./base/map.js";
 // 创建 AI Worker，用于处理 AI 逻辑
 const AIWorker = new Worker("js/Chess/base/AI.js", { type: "module" });
-
 
 const AIMapJSON = {
   // ...cache,
@@ -21,6 +22,7 @@ class Chess {
     // 初始化配置，默认启用 AI 日志
     this.config = { AIlog: true };
     Object.assign(this.config, config);
+    this.reset(initMap)
   }
 
   // 打印当前棋盘状态到控制台
@@ -178,13 +180,13 @@ class Chess {
   }
 
   // 创建棋子并初始化棋盘
-  createMans(cb) {
+  createMans() {
     const map = this.map;
     for (let y = 0; y < 10; y++) {
       for (let x = 0; x < 9; x++) {
         const key = map[y][x];
         if (key) {
-          const man = cb(this, key);
+          const man = new Man(key, this);
           map[y][x] = man;
           // man.move(x, y);
         }
@@ -193,17 +195,17 @@ class Chess {
   }
 
   // 重置游戏状态
-  reset(cb) {
-    this.map = getDefaultMap(); // 初始化棋盘
+  reset(map) {
+    this.map = map || getDefaultMap(); // 初始化棋盘
     this.selectedMan = null; // 当前选中的棋子
     this.isMyTurn = true; // 当前回合，true 表示红棋
     this.isGaming = true; // 游戏是否继续 被将死 五路可走了
     this.paceArr = []; // 步伐记录
     this.clearedManKeyArr = []; // 清除的棋子记录
-    this.createMans(cb); // 创建棋子
+    this.createMans(); // 创建棋子
   }
 
-  setGameOver(my) {}
+  setGameOver(my) { }
 
   // AI 走棋后处理
   afterAI(p, my, map) {
@@ -281,6 +283,8 @@ class Chess {
     };
     train(this.isMyTurn ? 1 : -1);
   }
+
+
 }
 
 export default Chess;
