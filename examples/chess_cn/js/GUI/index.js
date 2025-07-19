@@ -1,7 +1,7 @@
 ﻿// 导入皮肤配置模块
 import { skin } from "./skins.js";
 // 导入 DOM 管理模块
-import { DOMMan } from "../DOMMan.js";
+import { DOMMan } from "./DOMMan.js";
 
 export default function GUI(chess) {
   // 使用更简洁的语法创建一个空对象用于存储游戏相关信息

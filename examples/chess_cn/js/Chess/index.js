@@ -1,7 +1,8 @@
 ﻿import { getDefaultMap } from "./base/map.js";
 import { cache } from "./base/cache.js";
 // 创建 AI Worker，用于处理 AI 逻辑
-const AIWorker = new Worker("js/base/AI.js", { type: "module" });
+const AIWorker = new Worker("js/Chess/base/AI.js", { type: "module" });
+
 
 const AIMapJSON = {
   // ...cache,
