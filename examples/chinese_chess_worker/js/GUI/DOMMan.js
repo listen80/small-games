@@ -1,5 +1,5 @@
 // 导入 Man 类，该类作为 DOMMan 类的父类
-import { Man } from "./man/man.js";
+import { Man } from "../Chess/man/man.js";
 
 /**
  * DOMMan 类继承自 Man 类，主要用于管理棋子在 DOM 中的表现。
