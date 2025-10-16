@@ -2,6 +2,44 @@ import { createSpriteImage } from '../utils.js'
 
 const alienImages = ["img/planplay_1.png", "img/planplay_2.png", "img/planplay_3.png", "img/planplay_4.png", "img/planplay_5.png", "img/planplay_6.png", "img/planplay_7.png", "img/planplay_8.png", "img/planplay_9.png", "img/planplay_10.png", "img/planplay_11.png"];
 
+function init(plane) {
+    // 初始化摇杆
+    const options = {
+        zone: document.getElementById('joystick'),
+        mode: 'dynamic',       // 动态模式，摇杆根据方向移动
+        position: { left: '50%', top: '50%' }, // 居中显示
+        // color: 'blue',        // 摇杆颜色
+        size: 50,            // 摇杆区域大小
+        threshold: 0.1,       // 触发事件的阈值
+        fadeTime: 200         // 摇杆消失的过渡时间
+    };
+
+    // 创建摇杆实例
+    const manager = nipplejs.create(options);
+    // 监听摇杆事件
+    manager.on('move', (evt, data) => {
+        const direction = data.vector;
+        // 根据方向移动飞机
+        console.log(direction)
+        const { x, y } = direction
+        if (x === 0 || y === 0) {
+            return
+        }
+        const speed = 3
+        plane.x += x / Math.abs(x) * speed;
+        plane.y -= y / Math.abs(y) * speed;
+        // plane.play();
+        console.log(plane.x, plane.y)
+        if (plane.x >= 450) {
+            plane.x = 450
+        } else if (plane.x <= 50) {
+            plane.x = 50
+        }
+        if (plane.y >= 650) {
+            plane.y = 650
+        }
+    });
+}
 export function createPlane({ app, container, bg, grade, score, onDie, xue2 }) {
     const plane = PIXI.extras.AnimatedSprite.fromImages(alienImages);
     plane.visible = !true;
@@ -113,6 +151,11 @@ export function createPlane({ app, container, bg, grade, score, onDie, xue2 }) {
     grade.setTextsetText(playerLevel)
     score.setTextsetText(scores)
 
-    bg.on("mousemove", planeMove);
+    if (gameStatus === 1) {
+        init(plane)
+    } else {
+        bg.on("mousemove", planeMove);
+    }
+
     return plane;
 }
