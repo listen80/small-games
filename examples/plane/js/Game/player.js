@@ -150,8 +150,8 @@ export function createPlane({ app, container, bg, grade, score, onDie, xue2 }) {
 
     grade.setTextsetText(playerLevel)
     score.setTextsetText(scores)
-
-    if (gameStatus === 1) {
+    const isMobile = window.innerWidth <= 768
+    if (isMobile) {
         init(plane)
     } else {
         bg.on("mousemove", planeMove);
