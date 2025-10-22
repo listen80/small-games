@@ -601,6 +601,4 @@ export const maps = [
   ]
 ]
 
-console.log(maps.length, maps[0].length, maps[0][0].length)
-
 // 16

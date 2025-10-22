@@ -1,4 +1,4 @@
-class Box {
+export class Box {
     constructor(game, color, x = 0, y = 0) {
         this.game = game
         this.x = x

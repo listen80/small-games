@@ -1,3 +1,6 @@
+import { Box } from './box.js'
+import { BLOCK_TYPE, createRandomHSL } from './block.js'
+
 export class Tetris {
     constructor(config = {}) {
         const { el = document.body, side = 35, space = 4, width = 10, height = 14, speed = 300 } = config
