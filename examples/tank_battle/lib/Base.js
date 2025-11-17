@@ -151,17 +151,14 @@ export class Rect {
   }
   add(rect) {
     const { x = 0, y = 0 } = rect
+    this.x += x;
+    this.y += y;
   }
   equal(rect) {
     return this.x === rect.x && this.y === rect.y
   }
-}
-
-export class Animate extends Rect {
-  constructor({ x = 0, y = 0, w = 0, h = 0, z } = {}) {
-    super({ x, y, w, h, z });
-  }
   to(dist, opts = {}) {
+    debugger
     this.dist = dist;
     this.opts = opts;
     this._animations = true
@@ -170,6 +167,7 @@ export class Animate extends Rect {
     if (!this._animations) {
       return;
     }
+    debugger
     const elapsed = now - startTime;
     let t = elapsed / duration;
     if (t >= 1) t = 1;
@@ -189,6 +187,13 @@ export class Animate extends Rect {
     //   // this.#rect[key] = start + (end - start) * eased;
     // }
   }
+}
+
+export class Animate extends Rect {
+  constructor({ x = 0, y = 0, w = 0, h = 0, z } = {}) {
+    super({ x, y, w, h, z });
+  }
+  
 }
 
 export class Base {
