@@ -3,7 +3,9 @@ import { Group, Text, Ease } from "Engine";
 export default class Title extends Group {
   constructor() {
     super();
-    this.text = new Text({ x: 0, y: 0 }, "开始游戏")
+    this.title = new Text({ x: 16, y: 12 }, "坦克大战")
+    this.text = new Text({ x: 16, y: 32 }, "A 开始游戏")
+    this.add(this.title);
     this.add(this.text);
   }
   onAppear($engine) {
@@ -13,7 +15,7 @@ export default class Title extends Group {
     // this.animate.to({ x: 2, y: 1 })
     // this.animate.add(this.text)
     // this.add(this.animate)
-    this.ease = new Ease().to(this.text.rect(), { x: 11, y: 11 }, {
+    this.ease = new Ease().to(this.text.rect(), { x: 16, y: 21 }, {
       onUpdate: (rect) => {
         this.text.rect(rect)
       },
@@ -37,7 +39,7 @@ export default class Title extends Group {
     // this.text.rect().add({ x: 0.02, y: 0.01 })
     this.ease.update(dt || 1 / 60)
     const $engine = this.getEngine()
-    const confirm = $engine.controller.has(' ');
+    const confirm = $engine.controller.has('a');
     if (confirm) {
       $engine.goto("Level")
     }

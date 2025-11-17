@@ -1,4 +1,4 @@
-import { BOX_SIZE, TANK_SIZE } from "Data/size.js";
+import { BOX_SIZE } from "Data/size.js";
 import { Spirit, Move } from "Engine";
 
 export class Tank extends Move {

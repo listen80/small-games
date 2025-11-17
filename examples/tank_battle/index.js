@@ -2,7 +2,6 @@
 import * as config from "Data/size.js";
 import * as resource from "Data/resource.js";
 
-import Loading from "Scene/Loading.js";
 import Title from "Scene/Title.js";
 import Level from "Scene/Level.js";
 import Map from "Scene/Map.js";
@@ -15,7 +14,6 @@ export default class Game extends Engine {
   constructor() {
     super({
       scenes: {
-        Loading,
         Title,
         Level,
         Map,
@@ -25,3 +23,5 @@ export default class Game extends Engine {
     });
   }
 }
+
+console.log(new Game());

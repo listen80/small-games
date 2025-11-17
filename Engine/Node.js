@@ -132,7 +132,7 @@ export class Text extends Node {
   draw(ctx) {
     // debugger
     const $rect = this.rect();
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "white";
     ctx.fillText(this.#text, $rect.x * Node.boxSize, $rect.y * Node.boxSize);
   }
 }

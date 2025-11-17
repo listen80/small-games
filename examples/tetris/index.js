@@ -1,4 +1,4 @@
-import { Tetris } from './tetris.js'
+import { Tetris } from './js/tetris.js'
 new Tetris({
     width: 10,
     height: 15,

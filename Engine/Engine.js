@@ -1,19 +1,19 @@
 import Controller from "./Controller.js";
 import Canvas from "./Canvas.js";
 import Loader from "./Loader.js";
-
+import Style from "./Style.js";
+import Loading from "./Loading.js";
 export class Engine {
   #scenes;
-  constructor({ scenes, config, resource }) {
+  constructor(all) {
+    const { scenes, config, resource } = all
+    this.all = all
     this.loader = new Loader();
-    this.#scenes = {};
+    this.#scenes = { Loading };
     this.registryScenes(scenes);
-    this.loader.init(() => {
-      this.initBase(config);
-      this.goto('Loading')
-      this.render();
-      this.loadResource(resource);
-    });
+    this.initBase(config);
+    this.goto(resource ? 'Loading' : 'Title')
+    this.render();
   }
 
   registryScenes(allScenes) {
@@ -25,21 +25,18 @@ export class Engine {
 
   goto(name, data) {
     const Scene = this.#scenes[name]
+    if (!Scene) {
+      throw new Error(`场景${name}不存在`);
+    }
     const root = new Scene(data);
     this.renderRoot = root;
     root.setEngine(this)
   }
 
   initBase(config) {
+    this.style = new Style(config);
     this.canvaser = new Canvas(config);
     this.controller = new Controller(config);
-    
-  }
-
-  loadResource(resource) {
-    this.loader.loadResource(resource, () => {
-      this.goto('Title');
-    });
   }
 
   render() {

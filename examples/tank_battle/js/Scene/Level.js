@@ -1,9 +1,10 @@
 import { Group, Text } from "Engine";
 
 export default class Level extends Group {
-  constructor() {
+  constructor(level = 1) {
     super();
-    this.text = new Text({ x: 3, y: 4 }, "这是第1关");
+    this.level = level;
+    this.text = new Text({ x: 16, y: 4 }, `这是第${level}关`);
     this.add(this.text);
     this.tick = 0;
   }
@@ -14,8 +15,8 @@ export default class Level extends Group {
   }
   step() {
     this.tick++
-    this.text.val(`这是第${this.tick}关`)
-    if (this.tick === 330) {
+    this.text.val(`这是第${this.level}关`)
+    if (this.tick === 60) {
       this.getEngine().goto("Map")
     }
   }
