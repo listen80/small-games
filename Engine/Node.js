@@ -1,8 +1,7 @@
-import { Rect, Ease } from "./Rect.js";
-
-const size = 30;
+import { Rect } from "./Rect.js";
 
 export class Node {
+  static boxSize = 30;
   #parent = null;
   #engine = null;
   #rect = { x: 0, y: 0, w: 0, h: 0 }
@@ -47,6 +46,7 @@ export class Node {
 
 export class Group extends Node {
   #children = [];
+  
   constructor(...rest) {
     super();
     rest.forEach((child) => {
@@ -90,11 +90,11 @@ export class Group extends Node {
   }
   draw(ctx) {
     const rect = this.rect()
-    ctx.translate(rect.x * size, rect.y * size)
+    ctx.translate(rect.x * Node.boxSize, rect.y * Node.boxSize)
     this.#children.forEach((child, i) => {
       child.draw?.(ctx, i);
     });
-    ctx.translate(-rect.x * size, -rect.y * size)
+    ctx.translate(-rect.x * Node.boxSize, -rect.y * Node.boxSize)
 
   }
   setEngine(engine) {
@@ -117,7 +117,7 @@ export class Spirit extends Node {
   }
   draw(ctx) {
     const $rect = this.rect();
-    ctx.drawImage(this.#img, $rect.x * size, $rect.y * size, ($rect.w || 1) * size, ($rect.h || 1) * size);
+    ctx.drawImage(this.#img, $rect.x * Node.boxSize, $rect.y * Node.boxSize, ($rect.w || 1) * Node.boxSize, ($rect.h || 1) * Node.boxSize);
   }
 }
 export class Text extends Node {
@@ -133,7 +133,7 @@ export class Text extends Node {
     // debugger
     const $rect = this.rect();
     ctx.fillStyle = "red";
-    ctx.fillText(this.#text, $rect.x * size, $rect.y * size);
+    ctx.fillText(this.#text, $rect.x * Node.boxSize, $rect.y * Node.boxSize);
   }
 }
 

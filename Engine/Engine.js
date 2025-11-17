@@ -1,19 +1,18 @@
-// engine
 import Controller from "./Controller.js";
 import Canvas from "./Canvas.js";
 import Loader from "./Loader.js";
 
 export class Engine {
   #scenes;
-  constructor({ scenes }) {
+  constructor({ scenes, config, resource }) {
     this.loader = new Loader();
     this.#scenes = {};
     this.registryScenes(scenes);
     this.loader.init(() => {
-      this.initBase();
+      this.initBase(config);
       this.goto('Loading')
       this.render();
-      this.loadResource();
+      this.loadResource(resource);
     });
   }
 
@@ -31,14 +30,14 @@ export class Engine {
     root.setEngine(this)
   }
 
-  initBase() {
-    this.canvaser = new Canvas();
-    this.controller = new Controller();
+  initBase(config) {
+    this.canvaser = new Canvas(config);
+    this.controller = new Controller(config);
     
   }
 
-  loadResource() {
-    this.loader.loadResource(() => {
+  loadResource(resource) {
+    this.loader.loadResource(resource, () => {
       this.goto('Title');
     });
   }

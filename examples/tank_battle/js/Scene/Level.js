@@ -10,10 +10,11 @@ export default class Level extends Group {
   onAppear($engine) {
     const canvas = $engine.canvaser.canvas;
     const { height, width } = canvas;
-    this.text.rect({ x: width / 2, y: height / 2 });
+    // this.text.rect({ x: width / 2, y: height / 2 });
   }
   step() {
     this.tick++
+    this.text.val(`这是第${this.tick}关`)
     if (this.tick === 330) {
       this.getEngine().goto("Map")
     }
