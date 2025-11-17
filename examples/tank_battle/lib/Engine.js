@@ -46,7 +46,10 @@ export class Engine {
   render() {
     const render = () => {
       // this.controller.calc();
-      this.renderRoot.step(this.controller);
+      const now = performance.now();
+      const dt = now - (this._lastTime || now);
+      this._lastTime = now;
+      this.renderRoot.step(this.controller, dt);
       // this.controller.reset();
       this.canvaser.clear();
       this.renderRoot.draw(this.canvaser.ctx);

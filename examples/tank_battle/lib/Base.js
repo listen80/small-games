@@ -12,7 +12,6 @@ export class Ease {
   constructor(data = {}) {
     this.duration = data.duration ?? 300;
     this.timing = data.timing ?? Ease.linear;
-    this._animations = new Map(); // 存储正在运行的动画
   }
 
   /**
@@ -63,61 +62,41 @@ export class Ease {
    * @returns {string} 动画 id，可用于手动停止
    */
   to(target, to, opts = {}) {
-    const id = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const duration = opts.duration ?? this.duration;
-    const timing = opts.timing ?? this.timing;
-    const from = {};
-    const startTime = performance.now();
-
+    this.opts = opts;
+    this.duration = opts.duration ?? this.duration;
+    this.timing = opts.timing ?? this.timing;
+    this.from = {};
+    this.elapsed = 0;
+    this.to = to;
+    this.target = target;
     // 记录初始值
     for (const key in to) {
-      from[key] = target[key];
+      this.from[key] = target[key];
     }
-
-    const tick = (now) => {
-      const elapsed = now - startTime;
-      let t = elapsed / duration;
-      if (t >= 1) t = 1;
-      const eased = timing(t);
-
-      for (const key in to) {
-        const start = from[key];
-        const end = to[key];
-        target[key] = start + (end - start) * eased;
-      }
-
-      opts.onUpdate?.(target);
-
-      if (t < 1) {
-        this._animations.set(id, requestAnimationFrame(tick));
-      } else {
-        this._animations.delete(id);
-        opts.onComplete?.(target);
-      }
-    };
-
-    this._animations.set(id, requestAnimationFrame(tick));
-    return id;
+    return this
   }
 
-  /**
-   * 停止指定动画
-   * @param {string} id 动画 id
-   */
-  stop(id) {
-    const frame = this._animations.get(id);
-    if (frame) {
-      cancelAnimationFrame(frame);
-      this._animations.delete(id);
+  update(dt) {
+    if (this.elapsed / this.duration === 1) {
+      return
     }
-  }
+    this.elapsed += dt;
+    let t = this.elapsed / this.duration;
+    if (t >= 1) t = 1;
+    const eased = this.timing(t);
 
-  /**
-   * 停止所有动画
-   */
-  stopAll() {
-    this._animations.forEach((frame) => cancelAnimationFrame(frame));
-    this._animations.clear();
+    for (const key in this.to) {
+      const start = this.from[key];
+      const end = this.to[key];
+      this.target[key] = start + (end - start) * eased;
+    }
+
+    this.opts.onUpdate?.(this.target);
+
+    if (t < 1) {
+    } else {
+      this.opts.onComplete?.(this.target);
+    }
   }
 }
 
@@ -171,7 +150,7 @@ export class Rect {
     const elapsed = now - startTime;
     let t = elapsed / duration;
     if (t >= 1) t = 1;
-    const eased = (t);
+    const eased = this.opts.timing(t);
     for (const key in this.dist) {
       const start = this[key];
       const end = this.dist[key];
@@ -193,7 +172,6 @@ export class Animate extends Rect {
   constructor({ x = 0, y = 0, w = 0, h = 0, z } = {}) {
     super({ x, y, w, h, z });
   }
-  
 }
 
 export class Base {
