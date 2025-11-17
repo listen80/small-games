@@ -1,24 +1,25 @@
+const audioList = ["attack", "boom", "start"];
+const imgList = [
+  "p1",
+  "p2",
+  "enemy",
+  "wall",
+  "steel",
+  "grass",
+  "water",
+  "ice",
+  "home",
+  "bullet",
+  "blast",
+  "destory",
+];
+
 export default class Loader {
   constructor() {
     this.imgs = {};
     this.audios = {};
   }
   loadResource(fn) {
-    const audioList = ["attack", "boom", "start"];
-    const imgList = [
-      "p1",
-      "p2",
-      "enemy",
-      "wall",
-      "steel",
-      "grass",
-      "water",
-      "ice",
-      "home",
-      "bullet",
-      "blast",
-      "destory",
-    ];
     let downloaded = 0;
     this.loadImages(imgList, () => {
       downloaded++;

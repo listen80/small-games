@@ -1,6 +1,123 @@
+/**
+ * 缓动动画工具类
+ * 提供常用缓动函数及动画驱动方法
+ */
 export class Ease {
-  constructor(data) {
-    console.log(data)
+  /**
+   * 构造器
+   * @param {Object} data 初始化配置（可选）
+   * @param {number} data.duration 默认动画时长(ms)，默认 300
+   * @param {Function} data.timing 默认缓动函数，默认 Ease.linear
+   */
+  constructor(data = {}) {
+    this.duration = data.duration ?? 300;
+    this.timing = data.timing ?? Ease.linear;
+    this._animations = new Map(); // 存储正在运行的动画
+  }
+
+  /**
+   * 线性缓动
+   * @param {number} t 当前时间 0~1
+   * @returns {number}
+   */
+  static linear(t) {
+    return t;
+  }
+
+  /**
+   * 二次方缓入
+   * @param {number} t 当前时间 0~1
+   * @returns {number}
+   */
+  static quadIn(t) {
+    return t * t;
+  }
+
+  /**
+   * 二次方缓出
+   * @param {number} t 当前时间 0~1
+   * @returns {number}
+   */
+  static quadOut(t) {
+    return t * (2 - t);
+  }
+
+  /**
+   * 二次方缓入缓出
+   * @param {number} t 当前时间 0~1
+   * @returns {number}
+   */
+  static quadInOut(t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+
+  /**
+   * 创建一个缓动动画
+   * @param {Object} target 目标对象
+   * @param {Object} to 目标属性键值对
+   * @param {Object} opts 可选配置
+   * @param {number} opts.duration 动画时长(ms)
+   * @param {Function} opts.timing 缓动函数
+   * @param {Function} opts.onUpdate 每帧更新回调
+   * @param {Function} opts.onComplete 完成回调
+   * @returns {string} 动画 id，可用于手动停止
+   */
+  to(target, to, opts = {}) {
+    const id = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const duration = opts.duration ?? this.duration;
+    const timing = opts.timing ?? this.timing;
+    const from = {};
+    const startTime = performance.now();
+
+    // 记录初始值
+    for (const key in to) {
+      from[key] = target[key];
+    }
+
+    const tick = (now) => {
+      const elapsed = now - startTime;
+      let t = elapsed / duration;
+      if (t >= 1) t = 1;
+      const eased = timing(t);
+
+      for (const key in to) {
+        const start = from[key];
+        const end = to[key];
+        target[key] = start + (end - start) * eased;
+      }
+
+      opts.onUpdate?.(target);
+
+      if (t < 1) {
+        this._animations.set(id, requestAnimationFrame(tick));
+      } else {
+        this._animations.delete(id);
+        opts.onComplete?.(target);
+      }
+    };
+
+    this._animations.set(id, requestAnimationFrame(tick));
+    return id;
+  }
+
+  /**
+   * 停止指定动画
+   * @param {string} id 动画 id
+   */
+  stop(id) {
+    const frame = this._animations.get(id);
+    if (frame) {
+      cancelAnimationFrame(frame);
+      this._animations.delete(id);
+    }
+  }
+
+  /**
+   * 停止所有动画
+   */
+  stopAll() {
+    this._animations.forEach((frame) => cancelAnimationFrame(frame));
+    this._animations.clear();
   }
 }
 
@@ -25,7 +142,6 @@ export class Rect {
     if (typeof h === "number") {
       this.h = h;
     }
-
   }
   multi(n) {
     this.x *= n;
@@ -40,6 +156,41 @@ export class Rect {
     return this.x === rect.x && this.y === rect.y
   }
 }
+
+export class Animate extends Rect {
+  constructor({ x = 0, y = 0, w = 0, h = 0, z } = {}) {
+    super({ x, y, w, h, z });
+  }
+  to(dist, opts = {}) {
+    this.dist = dist;
+    this.opts = opts;
+    this._animations = true
+  }
+  step(controller) {
+    if (!this._animations) {
+      return;
+    }
+    const elapsed = now - startTime;
+    let t = elapsed / duration;
+    if (t >= 1) t = 1;
+    const eased = (t);
+    for (const key in this.dist) {
+      const start = this[key];
+      const end = this.dist[key];
+      this[key] = start + (end - start) * eased;
+    }
+    if (t === 1) {
+      this._animations = false;
+      this.opts.onComplete?.(this);
+    }
+    // for (const key in to) {
+    //   const start = from[key];
+    //   const end = to[key];
+    //   // this.#rect[key] = start + (end - start) * eased;
+    // }
+  }
+}
+
 export class Base {
   #parent = null;
   #engine = null;
@@ -169,6 +320,7 @@ export class Text extends Base {
     this.#text = text;
   }
   draw(ctx) {
+    // debugger
     const $rect = this.rect();
     ctx.fillStyle = "red";
     ctx.fillText(this.#text, $rect.x * size, $rect.y * size);

@@ -1,4 +1,4 @@
-import { Group, Text } from "Engine";
+import { Group, Text, Ease } from "Engine";
 
 export default class Title extends Group {
   constructor() {
@@ -8,8 +8,15 @@ export default class Title extends Group {
   }
   onAppear($engine) {
     const canvas = $engine.canvaser.canvas;
-    const { height, width } = canvas
-    this.text.rect({ x: width / 2, y: height / 2 })
+    const { height, width } = canvas;
+    // this.text.rect({ x: 2, y: 1 })
+
+    // this.text.rect({ x: width / 2, y: height / 2 - 50 })
+      // .ease(Ease.outQuad)
+      // .duration(300)
+    // this.text.rect({ x: width / 2, y: height / 2 })
+    //   .ease(Ease.outQuad)
+    //   .duration(300)
   }
   step() {
     const $engine = this.getEngine()

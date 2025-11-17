@@ -1,6 +1,6 @@
-import values from "./values.js";
+
 import { init_map } from "./map.js";
-import { bylaw } from "./bylaw.js";
+import { Man } from "./Man.js";
 
 function getValue(my) {
   var val = 0;
@@ -37,7 +37,7 @@ function getMans(my) {
   return mymans;
 }
 
-var getAlphaBeta = function (A, B, depth, map, my) {
+function getAlphaBeta(A, B, depth, map, my) {
   var val;
   var bestpace;
 
@@ -92,54 +92,6 @@ function clone2Arr(arr) {
     a.push(arr[x].slice());
   }
   return a;
-}
-
-function Man({ y, x, my, type, img, key }) {
-  this.x = x;
-  this.y = y;
-  this.my = my;
-  this.type = type;
-  this.img = img;
-  this.key = key;
-  this.checked = false;
-  this.values = this.my ? values[this.type] : values[this.type].slice().reverse();
-
-  this.val = function () {
-    return this.values[this.y][this.x];
-  };
-  this.pace = function () {
-    return bylaw[this.type](map, this.y, this.x, this.my);
-  };
-  this.goto = function (y, x, fn) {
-    delete map[this.y][this.x];
-    var eat = map[y][x];
-    map[y][x] = this.key;
-
-    this.checked = false;
-    this.y = y;
-    this.x = x;
-    fn && fn(eat);
-    return eat;
-  };
-  this.check = function () {
-    if (preman) {
-      preman.checked = false;
-    }
-    pace = this.pace(this.y, this.x);
-    this.paces = pace;
-    preman = this;
-    this.checked = true;
-  };
-  this.ablego = function (y, x) {
-    var v;
-    for (var i in this.paces) {
-      v = this.paces[i];
-      if (v.y === y && v.x === x) {
-        return true;
-      }
-    }
-    return false;
-  };
 }
 
 function loadAudio(fn) {
@@ -259,7 +211,7 @@ function initChess() {
           key: key,
         });
 
-        mans[z] = man;
+        mans[key] = man;
       }
     }
   }
@@ -300,7 +252,7 @@ function draw() {
 
 function start(isPvp) {
   pvp = isPvp;
-  map = clone2Arr(init_map);
+  window.map = clone2Arr(init_map);;
   draw();
 }
 
@@ -349,12 +301,14 @@ canvas.width = w;
 var audio = {};
 var imgs = {};
 var mans = {};
-var map;
+window.mans = mans;
 var preman;
+window.preman = preman;
+
 var myturn = true;
 var pvp = false;
 var pace = [];
-
+window.pace = pace;
 function init() {
   loadAudio(function () {
     loadImage(function () {

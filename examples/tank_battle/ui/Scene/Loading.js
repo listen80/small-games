@@ -9,7 +9,10 @@ export default class Loading extends Group {
   onAppear() {
     const $engine = this.getEngine();
     const canvas = $engine.canvaser.canvas;
-    const { height, width } = canvas
+    const { height, width } = canvas;
+    $engine.canvaser.ctx.font = "32px serif";
+    $engine.canvaser.ctx.textAlign = "center";
+    $engine.canvaser.ctx.fillStyle = "white";
     this.text.rect({ x: width / 2, y: height / 2 })
   }
 }
