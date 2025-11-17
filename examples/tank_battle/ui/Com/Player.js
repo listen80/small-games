@@ -1,5 +1,5 @@
 import { Tank } from "./Tank.js";
-import { Spirit } from "../../lib/Base.js";
+import { Spirit } from "Engine";
 export class Player extends Tank {
   constructor(name, x, y, img, cmdKeys) {
     super(x, y, img);

@@ -1,11 +1,11 @@
-import { Group, Base, Text } from "Engine";
+import { Group, Node, Text } from "Engine";
 
 import { maps } from "Data/maps.js";
 
 import { Grass, Water, Steel, Home, Wall, Ice } from "Com/MapBlock.js";
 import { Enemy } from "Com/Enemy.js";
 import { Player } from "Com/Player.js";
-class Array2 extends Base {
+class Array2 extends Node {
   constructor(map) {
     super()
     this.map = JSON.parse(JSON.stringify(map))
