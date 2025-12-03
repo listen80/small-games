@@ -2,18 +2,17 @@ import Controller from "./Controller.js";
 import Canvas from "./Canvas.js";
 import Loader from "./Loader.js";
 import Style from "./Style.js";
-import Loading from "./Loading.js";
+
 export class Engine {
   #scenes;
   constructor(all) {
     const { scenes, config, resource } = all
-    this.all = all
-    this.loader = new Loader();
-    this.#scenes = { Loading };
-    this.registryScenes(scenes);
+    
     this.initBase(config);
-    this.goto(resource ? 'Loading' : 'Title')
+    this.#scenes = {};
+    this.registryScenes(scenes);
     this.render();
+    this.goto(resource ? 'Loading' : 'Title')
   }
 
   registryScenes(allScenes) {
@@ -34,6 +33,7 @@ export class Engine {
   }
 
   initBase(config) {
+    this.loader = new Loader(config);
     this.style = new Style(config);
     this.canvaser = new Canvas(config);
     this.controller = new Controller(config);
@@ -45,14 +45,38 @@ export class Engine {
       const now = performance.now();
       const dt = now - (this._lastTime || now);
       this._lastTime = now;
-      this.renderRoot.step(this.controller, dt);
-      // this.controller.reset();
-      this.canvaser.clear();
-      this.renderRoot.draw(this.canvaser.ctx);
-      // console.log(this.renderRoot )
+      if (this.renderRoot) {
+        this.renderRoot.step(this.controller, dt);
+        // this.controller.reset();
+        this.canvaser.clear();
+        this.renderRoot.draw(this.canvaser.ctx);
+        // console.log(this.renderRoot )
+      }
       requestAnimationFrame(render);
     };
 
     render();
+  }
+}
+
+export class Array2 extends Node {
+  constructor(map) {
+    super()
+    this.map = JSON.parse(JSON.stringify(map))
+  }
+  draw(ctx) {
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        this.map[i][j].draw(ctx)
+      }
+    }
+  }
+  setEngine(engine) {
+    super.setEngine(engine);
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        this.map[i][j].setEngine(engine)
+      }
+    }
   }
 }

@@ -1,31 +1,10 @@
-import { Group, Node, Text } from "Engine";
+import { Group, Node, Text, Array2 } from "Engine";
 
 import { maps } from "Data/maps.js";
 
-import { Grass, Water, Steel, Home, Wall, Ice } from "Com/MapBlock.js";
+import { Grass, Water, Steel, Home, Wall, Ice } from "Com/Block.js";
 import { Enemy } from "Com/Enemy.js";
 import { Player } from "Com/Player.js";
-class Array2 extends Node {
-  constructor(map) {
-    super()
-    this.map = JSON.parse(JSON.stringify(map))
-  }
-  draw(ctx) {
-    for (let i = 0; i < this.map.length; i++) {
-      for (let j = 0; j < this.map[i].length; j++) {
-        this.map[i][j].draw(ctx)
-      }
-    }
-  }
-  setEngine(engine) {
-    super.setEngine(engine);
-    for (let i = 0; i < this.map.length; i++) {
-      for (let j = 0; j < this.map[i].length; j++) {
-        this.map[i][j].setEngine(engine)
-      }
-    }
-  }
-}
 
 export default class Map extends Group {
   constructor({ round = 16 } = {}) {

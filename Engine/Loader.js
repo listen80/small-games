@@ -51,7 +51,4 @@ export default class Loader {
     }
     this.imgs = imgs;
   }
-  init(fn) {
-    setTimeout(fn);
-  }
 }
