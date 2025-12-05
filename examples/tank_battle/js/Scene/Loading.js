@@ -10,7 +10,8 @@ export default class Loading extends Group {
     const $engine = this.getEngine();
     const { resource } = $engine.all
     $engine.loader.loadResource(resource, () => {
-      this.text.val('加载完成，按空格开始游戏')
+      // this.text.val('加载完成，按空格开始游戏')
+      $engine.goto("Title")
     });
   }
   step(a, dt) {

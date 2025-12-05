@@ -1,10 +1,15 @@
-import Controller from "./Controller.js";
+import Style from "../Support/Style.js";
+
+import Loader from "../Support/Loader.js";
 import Canvas from "./Canvas.js";
-import Loader from "./Loader.js";
-import Style from "./Style.js";
+import Sound from "./Sound.js";
+
+import Controller from "./Controller.js";
+
 
 export class Engine {
-  #scenes;
+  #scenes = {};
+  #lastTime = 0;
   constructor(all) {
     const { scenes, config, resource } = all
     this.all = all
@@ -33,9 +38,10 @@ export class Engine {
   }
 
   initBase(config) {
-    this.loader = new Loader(config);
     this.style = new Style(config);
-    this.canvaser = new Canvas(config);
+    this.loader = new Loader(config);
+    this.canvaser = new Canvas(config, this.loader);
+    this.sound = new Sound(config, this.loader);
     this.controller = new Controller(config);
   }
 
@@ -43,8 +49,8 @@ export class Engine {
     const render = () => {
       // this.controller.calc();
       const now = performance.now();
-      const dt = now - (this._lastTime || now);
-      this._lastTime = now;
+      const dt = now - (this.#lastTime || now);
+      this.#lastTime = now;
       if (this.renderRoot) {
         this.renderRoot.step(this.controller, dt);
         // this.controller.reset();
