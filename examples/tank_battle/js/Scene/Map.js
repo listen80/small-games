@@ -1,4 +1,4 @@
-import { Group, Node, Text, Array2 } from "Engine";
+import { Group, Text, Array2, Color } from "Engine";
 
 import { maps } from "Data/maps.js";
 
@@ -6,8 +6,8 @@ import { Grass, Water, Steel, Home, Wall, Ice } from "Com/Block.js";
 import { Enemy } from "Com/Enemy.js";
 import { Player } from "Com/Player.js";
 
-export default class Map extends Group {
-  constructor({ round = 16 } = {}) {
+export class MapBlack extends Group {
+  constructor({ round = 0 } = {}) {
     super();
     this.rect({ x: 2, y: 1 })
     this.round = round;
@@ -49,6 +49,8 @@ export default class Map extends Group {
   }
   createManyLayer() {
     // 创建游戏层级 草 墙 水 玩家 敌人 爆炸 子弹 钢板
+
+
     this.playerArray = new Group();
     this.enemyArray = new Group();
     this.boomArray = new Group();
@@ -60,6 +62,8 @@ export default class Map extends Group {
     this.map2Array = new Array2(this.map);
 
     this.add(
+      this.grayBg,
+      this.blackBg,
       this.map2Array,
       this.playerArray,
       this.enemyArray,
@@ -147,3 +151,23 @@ export default class Map extends Group {
     );
   }
 }
+
+export default class Map extends Group {
+  constructor({ round = 1 } = {}) {
+    super();
+    this.rect({ x: 0, y: 0 })
+    this.round = round;
+    this.map = maps[this.round];
+  }
+  onAppear($engine) {
+    // debugger
+    this.grayBg = new Color({}, "gray");
+    this.grayBg.rect({ x: 0, y: 0, w: 32, h: 30 - 2 })
+    
+    this.blackBg = new Color({}, "black");
+    this.blackBg.rect({ x: 2, y: 1, w: 26, h: 28 - 2 })
+
+    this.MapBlack = new MapBlack({ round: this.round })
+    this.add(this.grayBg, this.blackBg, this.MapBlack)
+  }
+} 

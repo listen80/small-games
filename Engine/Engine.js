@@ -7,7 +7,7 @@ export class Engine {
   #scenes;
   constructor(all) {
     const { scenes, config, resource } = all
-    
+    this.all = all
     this.initBase(config);
     this.#scenes = {};
     this.registryScenes(scenes);
@@ -59,24 +59,3 @@ export class Engine {
   }
 }
 
-export class Array2 extends Node {
-  constructor(map) {
-    super()
-    this.map = JSON.parse(JSON.stringify(map))
-  }
-  draw(ctx) {
-    for (let i = 0; i < this.map.length; i++) {
-      for (let j = 0; j < this.map[i].length; j++) {
-        this.map[i][j].draw(ctx)
-      }
-    }
-  }
-  setEngine(engine) {
-    super.setEngine(engine);
-    for (let i = 0; i < this.map.length; i++) {
-      for (let j = 0; j < this.map[i].length; j++) {
-        this.map[i][j].setEngine(engine)
-      }
-    }
-  }
-}

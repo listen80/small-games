@@ -3,7 +3,7 @@
  */
 // 游戏的宽度和高度
 const GAME_WIDTH = 32;
-const GAME_HEIGHT = 28;
+const GAME_HEIGHT = 30  - 2;
 
 // 每个格子的大小
 const BOX_SIZE = 30;

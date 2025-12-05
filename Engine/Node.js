@@ -137,6 +137,22 @@ export class Text extends Node {
   }
 }
 
+export class Color extends Node {
+  #color = "";
+  constructor(pos, color) {
+    super(pos);
+    this.val(color);
+  }
+  val(color) {
+    this.#color = color;
+  }
+  draw(ctx) {
+    const $rect = this.rect();
+    ctx.fillStyle = this.#color;
+    ctx.fillRect($rect.x * Node.boxSize, $rect.y * Node.boxSize, $rect.w * Node.boxSize, $rect.h * Node.boxSize);
+  }
+}
+
 export class Move extends Group {
   constructor({ x, y, w, h }, img) {
     super();
@@ -256,5 +272,27 @@ export class Move extends Group {
     ctx.translate(-this.$rect.w / 2, -this.$rect.h / 2);
     ctx.drawImage(this.img, 0, 0, this.$rect.w, this.$rect.h);
     ctx.restore();
+  }
+}
+
+export class Array2 extends Node {
+  constructor(map) {
+    super()
+    this.map = JSON.parse(JSON.stringify(map))
+  }
+  draw(ctx) {
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        this.map[i][j].draw(ctx)
+      }
+    }
+  }
+  setEngine(engine) {
+    super.setEngine(engine);
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        this.map[i][j].setEngine(engine)
+      }
+    }
   }
 }
