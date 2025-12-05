@@ -1,6 +1,7 @@
 import Style from "../Support/Style.js";
 
 import Loader from "../Support/Loader.js";
+
 import Canvas from "./Canvas.js";
 import Sound from "./Sound.js";
 
