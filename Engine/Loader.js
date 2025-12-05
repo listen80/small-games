@@ -3,7 +3,8 @@ export default class Loader {
     this.imgs = {};
     this.audios = {};
   }
-  loadResource({ imgList, audioList}, fn ) {
+
+  loadResource({ imgList, audioList }, fn) {
     let downloaded = 0;
     this.loadImages(imgList, () => {
       downloaded++;
@@ -19,36 +20,35 @@ export default class Loader {
     });
   }
 
-  loadAudio(audioList, fn) {
-    const audios = {};
+  loadAudio(audioes, fn) {
+    const audioList = Object.entries(audioes);
     for (var i = 0, audioLength = audioList.length; i < audioLength; i++) {
       const audio = document.createElement("audio");
-      const key = audioList[i];
-      audio.onloadstart = function () {
+      const [key, src] = audioList[i];
+      audio.onloadstart = () => {
         i--;
+        this.audios[key] = audio;
         if (!i) {
-          fn(audios);
+          fn(this.audios);
         }
       };
-      audio.src = "audio/" + key + ".mp3";
-      audios[key] = audio;
+      audio.src = "audio/" + src;
     }
-    this.audios = audios;
   }
-  loadImages(imgList, fn) {
-    const imgs = {};
+
+  loadImages(imgs, fn) {
+    const imgList = Object.entries(imgs);
     for (var j = 0, imgsLength = imgList.length; j < imgsLength; j++) {
       const img = new Image();
-      const key = imgList[j];
-      img.onload = function () {
+      const [key, src] = imgList[j];
+      img.onload = () => {
         j--;
         if (!j) {
-          fn(imgs);
+          fn(this.imgs);
         }
+        this.imgs[key] = img;
       };
-      img.src = "images/" + key + ".gif";
-      imgs[key] = img;
+      img.src = "images/" + src;
     }
-    this.imgs = imgs;
   }
 }
