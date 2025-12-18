@@ -8,7 +8,7 @@ import { Player } from "Com/Player.js";
 
 import { Bullet } from "Com/Tank.js";
 
-export class MapBlack extends Group {
+export class MapBlock extends Group {
   constructor({ round = 0 } = {}) {
     super();
     this.rect({ x: 2, y: 1 });
@@ -195,7 +195,7 @@ export default class Map extends Group {
     this.blackBg = new Color({}, "black");
     this.blackBg.rect({ x: 2, y: 1, w: 26, h: 26 });
 
-    this.mapBlack = new MapBlack({ round: this.round });
+    this.mapBlack = new MapBlock({ round: this.round });
     this.add(this.grayBg, this.blackBg, this.mapBlack);
   }
 }
